@@ -1,0 +1,33 @@
+# Use, modification, and distribution are
+# subject to the Boost Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+#
+# Copyright Mathieu Champlon 2015.
+
+environment:
+  matrix:
+    - address-model: 32
+    - address-model: 64
+
+configuration:
+  - debug
+  - release
+
+platform:
+  - msvc-10.0
+  - msvc-12.0
+
+init:
+  - set BRANCH_TO_TEST=master
+  - set BOOST=C:\projects\boost
+  - git clone -b %BRANCH_TO_TEST% https://github.com/boostorg/boost.git %BOOST%
+  - cd %BOOST%
+  - git submodule update --init --merge
+  - call bootstrap.bat
+  - b2 headers
+  - cd C:\projects\turtle
+
+build_script:
+  - cd build
+  - set BOOST_ROOT=%BOOST%
+  - call build.bat --toolset=%PLATFORM% address-model=%ADDRESS_MODEL% --build-type=complete %CONFIGURATION%
