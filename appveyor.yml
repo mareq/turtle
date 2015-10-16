@@ -17,7 +17,11 @@ platform:
   - msvc-10.0
   - msvc-12.0
 
-init:
+install:
+  - mkdir C:\libxslt
+  - ps: (new-object net.webclient).DownloadFile('ftp://ftp.zlatkovic.com/libxml/libxslt-1.1.26.win32.zip', 'C:\libxslt.zip')
+  - ps: foreach($item in (new-object -com shell.application).Namespace('C:\libxslt.zip\libxslt-1.1.26.win32\bin').items()) { (new-object -com shell.application).Namespace('C:\libxslt').copyhere($item) }
+  - set PATH=C:\libxslt;%PATH%
   - set BRANCH_TO_TEST=master
   - set BOOST=C:\projects\boost
   - git clone -b %BRANCH_TO_TEST% https://github.com/boostorg/boost.git %BOOST%
@@ -25,9 +29,8 @@ init:
   - git submodule update --init --merge
   - call bootstrap.bat
   - b2 headers
-  - cd C:\projects\turtle
 
 build_script:
-  - cd build
+  - cd C:\projects\turtle\build
   - set BOOST_ROOT=%BOOST%
   - call build.bat --toolset=%PLATFORM% address-model=%ADDRESS_MODEL% --build-type=complete %CONFIGURATION%
