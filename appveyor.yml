@@ -33,4 +33,4 @@ install:
 build_script:
   - cd C:\projects\turtle\build
   - set BOOST_ROOT=%BOOST%
-  - call build.bat --toolset=%PLATFORM% address-model=%ADDRESS_MODEL% --build-type=complete %CONFIGURATION%
+#  - call build.bat --toolset=%PLATFORM% address-model=%ADDRESS_MODEL% --build-type=complete %CONFIGURATION%
